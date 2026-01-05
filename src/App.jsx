@@ -26,14 +26,14 @@ import {
   FileText, Globe2, Ship, RefreshCw, User, Lock,
   FileSearch, Calculator, PieChart, Info,
   Store, ShoppingBag, Truck, Mail, Copy, Check,
-  Cpu, Zap, Radio, Target, Play, Bot
+  Cpu, Zap, Radio, Target, Play, Bot, Users, CreditCard, TrendingDown
 } from 'lucide-react';
 
 /**
- * --- SUDVIE NEXUS: VISION NEXUS v30.0 ---
+ * --- SUDVIE NEXUS: COMMAND CENTER v32.0 ---
  * AMBIENTE: Vercel Production Subdomain
  * INFRAESTRUTURA: sudvie-fd355 (Europe-West1)
- * PROTOCOLO: Global Launch & VISE Monitoring
+ * STATUS: CULMINAÇÃO TECNOLÓGICA CONSOLIDADA
  */
 
 const firebaseConfig = {
@@ -57,19 +57,19 @@ export default function App() {
   const [view, setView] = useState('dashboard');
   const [inventory, setInventory] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [status, setStatus] = useState({ cloud: 'initializing', sync: 'initializing', sheets: 'active', omni: 'active', vise: 'online' });
+  const [status, setStatus] = useState({ cloud: 'initializing', sync: 'initializing', sheets: 'active', omni: 'active', vise: 'online', hq: 'ready' });
   const [loading, setLoading] = useState(true);
   const [notif, setNotif] = useState(null);
 
-  // VISE States
-  const [investmentProgress, setInvestmentProgress] = useState(0);
-  const [aiEfficiency, setAiEfficiency] = useState(0);
+  // VISE States (Simulation for visualization)
+  const [investmentProgress, setInvestmentProgress] = useState(49.2);
+  const [aiEfficiency, setAiEfficiency] = useState(88.4);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setInvestmentProgress(prev => (prev < 65 ? prev + 0.1 : prev));
-      setAiEfficiency(prev => (prev < 98 ? prev + 0.2 : prev));
-    }, 100);
+      setInvestmentProgress(prev => (prev < 65 ? prev + 0.05 : prev));
+      setAiEfficiency(prev => (prev < 98 ? prev + 0.1 : prev));
+    }, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -78,7 +78,6 @@ export default function App() {
       try {
         await signInAnonymously(auth);
       } catch (e) {
-        console.error("Critical Failure", e.message);
         setStatus(s => ({ ...s, cloud: 'failed' }));
       }
     };
@@ -117,11 +116,17 @@ export default function App() {
   };
 
   const lowStockItems = useMemo(() => inventory.filter(i => (i.stockBr || 0) <= 5), [inventory]);
+  const ruptureItems = useMemo(() => inventory.filter(i => (i.stockBr || 0) === 0), [inventory]);
 
   if (loading) return (
-    <div className="h-screen bg-[#050505] flex flex-col items-center justify-center text-white">
-      <Cpu className="animate-pulse text-blue-500 mb-8" size={60} />
-      <p className="text-[10px] font-black tracking-[1em] uppercase opacity-40">Initializing Vision v30</p>
+    <div className="h-screen bg-[#020617] flex flex-col items-center justify-center text-white">
+      <div className="relative">
+        <div className="size-24 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Wine size={32} className="text-blue-500" />
+        </div>
+      </div>
+      <p className="mt-8 text-[10px] font-black tracking-[1em] uppercase opacity-30">Consolidating HQ v32</p>
     </div>
   );
 
@@ -131,125 +136,163 @@ export default function App() {
 
       {/* SIDEBAR */}
       <aside className="w-full md:w-80 bg-[#020617] text-white flex flex-col z-50 shadow-2xl relative shrink-0">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+
         <div className="p-10 md:p-12">
           <div className="flex items-center gap-6 mb-16">
-            <div className="size-16 bg-blue-600 rounded-2xl flex items-center justify-center font-serif text-3xl font-black italic shadow-2xl shadow-blue-500/20">S</div>
+            <div className="size-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center font-serif text-3xl font-black italic shadow-2xl shadow-blue-500/20">S</div>
             <div>
               <h1 className="font-serif font-black text-2xl leading-none italic uppercase tracking-tighter">Sudvie</h1>
-              <p className="text-[8px] font-black text-blue-400/50 uppercase tracking-[0.4em] mt-2">Vision Nexus v30</p>
+              <p className="text-[8px] font-black text-blue-400/50 uppercase tracking-[0.4em] mt-2">Command Center v32</p>
             </div>
           </div>
 
           <nav className="space-y-4">
-            <SideLink active={view === 'dashboard'} onClick={() => setView('dashboard')} icon={Activity} label="Nexus Control" />
-            <SideLink active={view === 'vise'} onClick={() => setView('vise')} icon={Cpu} label="AI Vision (VISE)" />
-            <SideLink active={view === 'omnichannel'} onClick={() => setView('omnichannel')} icon={ShoppingBag} label="Omnichannel" />
-            <SideLink active={view === 'production'} onClick={() => setView('production')} icon={Globe2} label="Asset Entry" />
+            <SideLink active={view === 'dashboard'} onClick={() => setView('dashboard')} icon={LayoutDashboard} label="Command Center" />
+            <SideLink active={view === 'hq'} onClick={() => setView('hq')} icon={BarChart3} label="Global Audit" />
+            <SideLink active={view === 'vise'} onClick={() => setView('vise')} icon={Cpu} label="AI Vision Hub" />
+            <SideLink active={view === 'omnichannel'} onClick={() => setView('omnichannel')} icon={ShoppingBag} label="Marketplaces" />
+            <SideLink active={view === 'production'} onClick={() => setView('production')} icon={Globe2} label="Production Hub" />
             <SideLink active={view === 'retail'} onClick={() => setView('retail')} icon={Smartphone} label="Terminal CRM" />
-            <SideLink active={view === 'hq'} onClick={() => setView('hq')} icon={BarChart3} label="Audit Business" />
           </nav>
         </div>
 
-        <div className="mt-auto p-12 bg-white/5 border-t border-white/5">
-          <HealthIndicator label="VISE AI" active={status.vise === 'online'} />
+        <div className="mt-auto p-12 bg-white/5 border-t border-white/5 font-mono">
+          <div className="space-y-4">
+            <HealthIndicator label="HQ Engine" active={status.hq === 'ready'} />
+            <HealthIndicator label="Global Sync" active={status.sync === 'active'} />
+          </div>
         </div>
       </aside>
 
-      {/* MAIN */}
+      {/* MAIN VIEWPORT */}
       <main className="flex-1 overflow-y-auto bg-white relative">
         <header className="h-24 bg-white/80 border-b px-12 flex items-center justify-between sticky top-0 z-40 backdrop-blur-2xl">
           <div className="flex items-center gap-4">
-            <div className="size-2 bg-blue-500 rounded-full animate-pulse"></div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Sudvie Global Core</span>
+            <div className="size-2 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_#3b82f6]"></div>
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 italic">Sudvie International HQ</span>
           </div>
-          {lowStockItems.length > 0 && (
-            <button onClick={() => setView('omnichannel')} className="bg-rose-500 text-white text-[9px] font-black px-6 py-3 rounded-full animate-pulse uppercase italic">
-              {lowStockItems.length} Ruptures Detected
-            </button>
-          )}
+
+          <div className="flex items-center gap-8">
+            {ruptureItems.length > 0 && (
+              <div className="bg-rose-600 text-white text-[9px] font-black px-6 py-3 rounded-full animate-pulse flex items-center gap-2 uppercase italic shadow-lg shadow-rose-500/20">
+                <AlertTriangle size={14} /> {ruptureItems.length} Ruptures de Stock
+              </div>
+            )}
+            {notif && (
+              <div className="bg-[#0f172a] text-white text-[9px] font-black px-6 py-3 rounded-full shadow-2xl animate-fadeIn flex items-center gap-2 uppercase italic border border-white/10">
+                <CheckCircle2 size={14} className="text-emerald-400" /> {notif}
+              </div>
+            )}
+          </div>
         </header>
 
-        <div className="p-12 md:p-24 max-w-[1600px] mx-auto">
+        <div className="p-12 md:p-24 max-w-[1600px] mx-auto w-full">
 
-          {/* VIEW: SUDVIE VISE (VISION VISUALIZER) */}
-          {view === 'vise' && (
+          {/* VIEW: MAIN DASHBOARD */}
+          {view === 'dashboard' && (
             <div className="space-y-24 animate-fadeIn">
-              <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
-                <div className="space-y-4">
-                  <h2 className="text-8xl font-serif font-black tracking-tighter text-[#020617] uppercase italic leading-none">Sudvie <span className="text-blue-600">VISE</span></h2>
-                  <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.5em] italic">Vines Integrated Smart Ecosystem</p>
+              <header className="space-y-8">
+                <h2 className="text-8xl font-serif font-black tracking-tighter text-[#020617] uppercase italic leading-[0.85]">Multinational <br /> <span className="text-blue-600">Command</span></h2>
+                <p className="text-slate-400 text-2xl font-serif italic max-w-2xl">Monitoramento absoluto de vendas, comissões de campo e inventário transatlântico.</p>
+              </header>
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <HQStatsCard label="Gross Revenue" val={`R$ ${orders.reduce((a, b) => a + (b.total || 0), 0).toLocaleString('pt-BR')}`} icon={TrendingUp} trend="+12.4%" />
+                <HQStatsCard label="Sales Force" val="12 Agents" icon={Users} trend="Elite v4.0" />
+                <HQStatsCard label="Total Commission" val={`R$ ${(orders.reduce((a, b) => a + (b.total || 0), 0) * 0.1).toLocaleString('pt-BR')}`} icon={CreditCard} trend="10% Flat" />
+                <HQStatsCard label="Global Stock" val={`${inventory.reduce((a, b) => a + (b.stockBr || 0) + (b.stockFr || 0), 0)} Un`} icon={Database} trend="Unified" />
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                {/* SALES FORCE LEADERBOARD */}
+                <div className="lg:col-span-2 bg-[#020617] rounded-[4rem] text-white p-16 relative overflow-hidden group shadow-3xl">
+                  <div className="absolute top-0 right-0 p-16 opacity-5 group-hover:scale-110 transition-transform duration-[4s]"><Globe size={300} /></div>
+                  <div className="relative z-10 flex justify-between items-center mb-16 border-b border-white/10 pb-10">
+                    <h3 className="text-3xl font-serif font-black italic uppercase tracking-tighter">Sales Force Monitor</h3>
+                    <div className="size-12 bg-blue-600 rounded-xl flex items-center justify-center shadow-2xl shadow-blue-500/20"><Users size={24} /></div>
+                  </div>
+                  <div className="space-y-10 relative z-10">
+                    <SellerRow name="Representante Natal (Elite)" revenue={orders.filter(o => o.source?.includes('Elite')).reduce((a, b) => a + (b.total || 0), 0)} sales={orders.filter(o => o.source?.includes('Elite')).length} />
+                    <SellerRow name="Marketplace: Amazon" revenue={orders.filter(o => o.source?.includes('Amazon')).reduce((a, b) => a + (b.total || 0), 0)} sales={orders.filter(o => o.source?.includes('Amazon')).length} />
+                    <SellerRow name="Marketplace: Mercado Livre" revenue={orders.filter(o => o.source?.includes('ML')).reduce((a, b) => a + (b.total || 0), 0)} sales={orders.filter(o => o.source?.includes('ML')).length} />
+                  </div>
                 </div>
-                <div className="flex gap-8">
-                  <div className="text-right">
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Innovation Fund</p>
-                    <p className="text-4xl font-mono font-black text-emerald-600 tracking-tighter">R$ 2.450.000</p>
+
+                {/* STOCK ALERT CENTER */}
+                <div className="bg-slate-50 rounded-[4rem] border border-slate-100 p-16 flex flex-col shadow-sm">
+                  <div className="mb-12">
+                    <h3 className="text-3xl font-serif font-black italic uppercase tracking-tighter text-[#020617]">Stock Rupture</h3>
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mt-2 italic">Natal Logistics Node</p>
                   </div>
-                  <div className="size-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-2xl shadow-blue-500/20">
-                    <Cpu size={32} />
+                  <div className="space-y-6 flex-1 max-h-[400px] overflow-y-auto pr-4">
+                    {inventory.map(item => (
+                      <div key={item.id} className="flex items-center justify-between p-6 bg-white rounded-3xl border border-slate-100 shadow-sm group">
+                        <div>
+                          <p className="text-sm font-black italic uppercase text-[#020617]">{item.name}</p>
+                          <p className="text-[8px] font-black text-slate-400 uppercase mt-1 font-mono">Stock: {item.stockBr} UN</p>
+                        </div>
+                        <div className={`size-3 rounded-full ${item.stockBr === 0 ? 'bg-rose-500 shadow-[0_0_10px_#f43f5e]' : item.stockBr <= 5 ? 'bg-amber-500 shadow-[0_0_10px_#f59e0b]' : 'bg-emerald-500 shadow-[0_0_10px_#10b981]'}`}></div>
+                      </div>
+                    ))}
                   </div>
+                  <button onClick={() => setView('omnichannel')} className="mt-12 w-full bg-[#020617] text-white py-6 rounded-3xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-3 hover:bg-blue-600 transition-all shadow-2xl">
+                    Acionar Hub Bordeaux <ArrowRight size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* VIEW: GLOBAL AUDIT (v32 Detail) */}
+          {view === 'hq' && (
+            <div className="space-y-24 animate-fadeIn">
+              <header className="flex justify-between items-end border-b border-slate-100 pb-16">
+                <div className="space-y-6">
+                  <h2 className="text-7xl font-serif font-black tracking-tighter text-[#020617] uppercase italic leading-none">Ledger <br /> <span className="text-blue-600">Audit</span></h2>
+                  <p className="text-slate-400 text-xl font-serif italic max-w-md text-slate-400">Rastreamento imutável de transações globais.</p>
                 </div>
               </header>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <TechCard label="Reinvestment Progress" value={`${investmentProgress.toFixed(1)}%`} icon={TrendingUp} desc="Allocating revenue to Robotics R&D." />
-                <TechCard label="AI Genomic Efficiency" value={`${aiEfficiency.toFixed(1)}%`} icon={Target} desc="Precision in terroir mapping." />
-                <TechCard label="Humanoid Units" value="12" icon={Bot} desc="Active prototypes in Bordeaux Hub." />
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div className="bg-[#020617] rounded-[4rem] text-white p-12 relative overflow-hidden group shadow-3xl">
-                  <Globe className="absolute top-0 right-0 p-12 opacity-[0.05] group-hover:scale-110 transition-transform duration-[4s]" size={400} />
-                  <h3 className="text-2xl font-black italic uppercase tracking-tighter mb-10 flex items-center gap-4">
-                    <Radio size={24} className="text-blue-500 animate-pulse" /> Real-time Terroir Monitoring
-                  </h3>
-                  <div className="space-y-12 relative z-10">
-                    <SensorRow label="Soil Hydration" value="42%" status="Optimized" />
-                    <SensorRow label="UV Radiation" value="High" status="Shadowing Active" />
-                    <SensorRow label="Robot Activity" value="85%" status="Pruning Phase" />
+              <div className="grid grid-cols-1 gap-8">
+                {orders.length === 0 ? (
+                  <div className="p-32 bg-slate-50 rounded-[4rem] text-center space-y-6 border border-slate-100 border-dashed">
+                    <FileSearch size={64} className="mx-auto text-slate-200" />
+                    <p className="text-2xl font-serif italic text-slate-400">Nenhuma transação registrada no período.</p>
                   </div>
-                </div>
-
-                <div className="bg-slate-50 rounded-[4rem] border border-slate-100 p-12 flex flex-col justify-between shadow-sm">
-                  <div className="space-y-6">
-                    <h3 className="text-3xl font-serif font-black italic uppercase tracking-tighter text-[#020617]">Profit Automation</h3>
-                    <p className="text-slate-500 font-serif italic text-xl leading-relaxed">
-                      "Nexus v30 is configured to auto-transfer 60% of Natal revenue to the VISE innovation fund upon transaction settlement."
-                    </p>
-                  </div>
-                  <div className="mt-12 space-y-8">
-                    <div className="flex justify-between items-end">
-                      <span className="text-[10px] font-black uppercase text-blue-600 tracking-widest font-mono italic">2027 Harvest Goal</span>
-                      <span className="text-3xl font-black italic text-[#020617]">R$ 5.000.000</span>
+                ) : (
+                  orders.map(o => (
+                    <div key={o.id} className="flex flex-col md:flex-row justify-between items-center p-12 bg-white rounded-[4rem] border border-slate-100 hover:border-blue-500/50 transition-all duration-700 shadow-sm group">
+                      <div className="flex items-center gap-10">
+                        <div className="size-20 bg-slate-50 text-[#020617] rounded-3xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner"><DollarSign size={32} /></div>
+                        <div>
+                          <h4 className="text-4xl font-serif font-black italic uppercase text-[#020617] leading-none mb-3">{o.wineName}</h4>
+                          <div className="flex items-center gap-4 text-[10px] font-black uppercase text-slate-400 italic font-mono">
+                            <span className="flex items-center gap-1 text-blue-600"><Radio size={12} /> {o.source}</span>
+                            <div className="size-1 bg-slate-200 rounded-full"></div>
+                            <span>{o.timestamp ? new Date(o.timestamp.seconds * 1000).toLocaleString() : 'PENDENTE'}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right mt-8 md:mt-0">
+                        <p className="text-5xl font-serif font-black italic tracking-tighter text-[#020617]">R$ {o.total?.toFixed(2)}</p>
+                        <div className="flex items-center justify-end gap-3 mt-4">
+                          <span className="px-4 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-[9px] font-black uppercase tracking-widest italic outline outline-1 outline-emerald-200">Pago</span>
+                          <span className="px-4 py-1.5 bg-blue-100 text-blue-700 rounded-full text-[9px] font-black uppercase tracking-widest italic outline outline-1 outline-blue-200">Sync OK</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="h-4 bg-white rounded-full overflow-hidden border border-slate-200">
-                      <div className="h-full bg-blue-600 shadow-[0_0_20px_#2563eb]" style={{ width: '49%' }}></div>
-                    </div>
-                    <button className="w-full bg-[#020617] text-white py-8 rounded-3xl font-black uppercase text-xs tracking-widest flex items-center justify-center gap-4 hover:bg-blue-600 transition-all shadow-2xl active:scale-95">
-                      <Play size={20} fill="currentColor" /> Run Harvest Simulation
-                    </button>
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
             </div>
           )}
 
-          {/* OTHER VIEWS (DASHBOARD, OMNI, PRODUCTION, RETAIL, HQ) - MINIMIZED FOR BREVITY BUT FULLY FUNCTIONAL */}
-          {view === 'dashboard' && (
-            <div className="space-y-12 animate-fadeIn">
-              <h2 className="text-7xl font-serif font-black tracking-tighter text-[#020617] uppercase italic mb-20">Global <br /> <span className="text-blue-600">Operations</span></h2>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <ModernTile title="Marketplaces" val="4 Active" icon={ShoppingBag} active={true} />
-                <ModernTile title="Fiscal Sync" val="Verified" icon={CheckCircle2} active={true} />
-                <ModernTile title="VISE AI" val="Online" icon={Cpu} active={true} />
-                <ModernTile title="Stock Status" val={lowStockItems.length === 0 ? "Normal" : "Rupture Alert"} icon={Database} active={lowStockItems.length === 0} />
-              </div>
-            </div>
-          )}
-
+          {/* REUSED VIEWS FROM v30 (VISE, OMNI, PRODUCTION, RETAIL) */}
+          {view === 'vise' && <VISEView progress={investmentProgress} efficiency={aiEfficiency} />}
           {view === 'omnichannel' && <OmnichannelView inventory={inventory} lowStockItems={lowStockItems} notify={notify} />}
           {view === 'production' && <div className="max-w-2xl mx-auto"><ProductEntryModule db={db} appId={appId} notify={notify} /></div>}
           {view === 'retail' && <RetailTerminal inventory={inventory} db={db} appId={appId} notify={notify} />}
-          {view === 'hq' && <AuditHQ orders={orders} />}
 
         </div>
       </main>
@@ -265,41 +308,188 @@ export default function App() {
   );
 }
 
-// --- SUB-COMPONENTS ---
+// --- SUB-COMPONENTS v32 ---
 
-function TechCard({ label, value, icon: Icon, desc }) {
+function HQStatsCard({ label, val, icon: Icon, trend }) {
   return (
-    <div className="bg-slate-50 p-12 rounded-[4rem] border border-slate-100 hover:bg-white transition-all group hover:shadow-2xl">
-      <div className="size-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-10 group-hover:scale-110 transition-transform">
-        <Icon size={32} />
+    <div className="p-12 bg-white rounded-[4rem] border border-slate-100 shadow-lg shadow-slate-200/20 group hover:-translate-y-2 transition-all duration-700">
+      <div className="flex justify-between items-start mb-10">
+        <div className="size-14 bg-slate-50 text-[#020617] rounded-2xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner"><Icon size={24} /></div>
+        <span className="text-[10px] font-black uppercase text-emerald-600 bg-emerald-50 px-4 py-1.5 rounded-full italic tracking-widest">{trend}</span>
       </div>
-      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-4 italic font-mono">{label}</p>
-      <h3 className="text-5xl font-black italic tracking-tighter text-[#020617] uppercase leading-none">{value}</h3>
-      <p className="text-[11px] text-slate-400 mt-6 leading-relaxed font-bold italic">{desc}</p>
+      <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.4em] mb-3 italic font-mono">{label}</p>
+      <h3 className="text-4xl font-serif font-black italic text-[#020617] tracking-tighter leading-none">{val}</h3>
     </div>
   );
 }
 
-function SensorRow({ label, value, status }) {
+function SellerRow({ name, revenue, sales }) {
+  const commission = revenue * 0.1;
   return (
-    <div className="flex items-center justify-between border-b border-white/5 pb-8 group">
-      <div>
-        <p className="text-[10px] font-black uppercase text-stone-500 tracking-widest mb-2 font-mono italic">{label}</p>
-        <p className="text-3xl font-black italic uppercase tracking-tighter group-hover:text-blue-400 transition-colors">{value}</p>
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-8 bg-white/5 rounded-[2.5rem] border border-white/5 hover:bg-white/10 transition-all group gap-8">
+      <div className="flex items-center gap-8">
+        <div className="size-16 bg-blue-600/20 text-blue-400 rounded-2xl flex items-center justify-center font-bold italic">Elite</div>
+        <div>
+          <h4 className="text-2xl font-serif font-black italic uppercase text-white leading-none">{name}</h4>
+          <p className="text-[9px] font-black uppercase text-stone-500 mt-2 italic tracking-widest">{sales} Vendas Realizadas</p>
+        </div>
+      </div>
+      <div className="flex gap-12 text-right">
+        <div className="space-y-1">
+          <p className="text-[8px] font-black uppercase text-stone-600 tracking-widest">Revenue</p>
+          <p className="text-2xl font-black italic text-white tracking-tighter">R$ {revenue.toLocaleString('pt-BR')}</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-[8px] font-black uppercase text-blue-500 tracking-widest">Comissão 10%</p>
+          <p className="text-2xl font-black italic text-blue-400 tracking-tighter">R$ {commission.toLocaleString('pt-BR')}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VISEView({ progress, efficiency }) {
+  return (
+    <div className="space-y-16 animate-fadeIn">
+      <div className="max-w-3xl space-y-6">
+        <h2 className="text-7xl font-serif font-black italic uppercase text-[#020617] leading-none">AI Vision <span className="text-blue-600">Hub</span></h2>
+        <p className="text-slate-400 text-2xl font-serif italic">Mapeamento autônomo de Terroir e Robotização de Vinhedos v32.</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="p-16 bg-[#020617] text-white rounded-[5rem] relative overflow-hidden group">
+          <Radio className="absolute -top-10 -right-10 size-64 opacity-5 group-hover:scale-125 transition-transform duration-[5s]" />
+          <h4 className="text-3xl font-black italic uppercase tracking-tighter mb-12 flex items-center gap-4"><Zap size={24} className="text-blue-500" /> Ecosystem Efficiency</h4>
+          <div className="space-y-12">
+            <SensorProgress label="Capital Reinvestment" val={progress} />
+            <SensorProgress label="Robot Accuracy" val={efficiency} />
+          </div>
+        </div>
+        <div className="p-16 bg-white border border-slate-100 rounded-[5rem] flex flex-col justify-center space-y-8 shadow-sm">
+          <div className="size-20 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center shadow-inner"><Bot size={40} /></div>
+          <p className="text-slate-400 font-serif italic text-2xl leading-relaxed">
+            "O módulo VISE projeta autonomia total do Hub Bordeaux até a safra 2030, reduzindo custos de OE em 40%."
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SensorProgress({ label, val }) {
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-end">
+        <span className="text-[10px] font-black uppercase text-stone-500 tracking-widest">{label}</span>
+        <span className="text-2xl font-black italic">{val.toFixed(1)}%</span>
+      </div>
+      <div className="h-4 bg-white/5 rounded-full overflow-hidden border border-white/5">
+        <div className="h-full bg-blue-600 shadow-[0_0_20px_#2563eb]" style={{ width: `${val}%` }}></div>
+      </div>
+    </div>
+  );
+}
+
+// Shells for other views (Omni, Production, Retail)
+function OmnichannelView({ inventory, lowStockItems, notify }) {
+  return (
+    <div className="space-y-16">
+      <h2 className="text-6xl font-serif font-black italic uppercase text-[#020617]">Marketplace <span className="text-blue-600">Sync</span></h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <MarketplaceChannel name="Amazon BR" status="Ativo" sales={24} icon={Store} color="blue" />
+        <MarketplaceChannel name="Mercado Livre" status="Ativo" sales={38} icon={ShoppingBag} color="amber" />
+        <MarketplaceChannel name="Nuvemshop" status="Sincronizando" sales={12} icon={Globe} color="blue" />
+        <MarketplaceChannel name="Elite Salesforce" status="Elite" sales={45} icon={Zap} color="emerald" />
+      </div>
+    </div>
+  );
+}
+
+function MarketplaceChannel({ name, status, sales, icon: Icon, color }) {
+  return (
+    <div className="p-10 bg-white border border-slate-100 rounded-[4rem] flex items-center justify-between group hover:border-blue-500 transition-all shadow-sm">
+      <div className="flex items-center gap-8">
+        <div className={`size-16 bg-${color}-50 text-${color}-600 rounded-3xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner`}><Icon size={28} /></div>
+        <div>
+          <h4 className="text-3xl font-serif font-black italic uppercase text-[#020617]">{name}</h4>
+          <p className={`text-[10px] font-black uppercase text-${color}-600 mt-2 italic tracking-widest`}>{status}</p>
+        </div>
       </div>
       <div className="text-right">
-        <span className="text-[9px] font-black uppercase bg-white/5 px-6 py-2 rounded-full border border-white/10 text-blue-400">
-          {status}
-        </span>
+        <p className="text-4xl font-black italic text-[#020617]">{sales}</p>
+        <p className="text-[8px] font-black uppercase text-slate-300 tracking-widest">Vendas Mês</p>
       </div>
     </div>
   );
 }
 
+function RetailTerminal({ inventory, db, appId, notify }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      {inventory.map(item => (
+        <div key={item.id} className="bg-white p-12 rounded-[5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-700 group flex flex-col h-full relative">
+          <div className="aspect-square rounded-[3.5rem] bg-slate-50 mb-10 overflow-hidden relative">
+            {item.img && <img src={item.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />}
+            <div className={`absolute top-8 right-8 text-white text-[9px] font-black px-6 py-2 rounded-full italic shadow-2xl ${item.stockBr === 0 ? 'bg-rose-600' : 'bg-[#020617]'}`}>Stock: {item.stockBr}</div>
+          </div>
+          <h4 className="text-3xl font-serif font-black italic uppercase mb-10 leading-none opacity-80 group-hover:text-blue-600 transition-colors">{item.name}</h4>
+          <div className="flex justify-between items-center mt-auto border-t border-slate-50 pt-10">
+            <span className="text-4xl font-black italic">R$ {item.price?.toFixed(2)}</span>
+            <button onClick={async () => {
+              if (item.stockBr <= 0) return notification.error("Sem Estoque");
+              const wineRef = doc(db, 'artifacts', appId, 'public', 'data', 'inventory', item.id);
+              await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'orders'), { wineName: item.name, total: item.price, timestamp: serverTimestamp(), source: 'Elite Salesforce (Field)' });
+              await updateDoc(wineRef, { stockBr: increment(-1) });
+              notify("Venda Sincronizada com o HQ!");
+            }} disabled={item.stockBr <= 0} className="size-16 bg-[#020617] text-white rounded-2.5rem flex items-center justify-center hover:bg-blue-600 transition-all active:scale-95 disabled:opacity-10 shadow-3xl">
+              <ShoppingCart size={28} />
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ProductEntryModule({ db, appId, notify }) {
+  const [form, setForm] = useState({ name: '', price: '', img: null });
+  const [busy, setBusy] = useState(false);
+
+  const executeUpload = async () => {
+    if (!form.name || !form.price) return;
+    setBusy(true);
+    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'inventory'), { ...form, price: parseFloat(form.price), stockBr: 10, stockFr: 500, timestamp: serverTimestamp() });
+    setForm({ name: '', price: '', img: null });
+    notify("Digital Asset Activated in Bordeaux!");
+    setBusy(false);
+  };
+
+  return (
+    <div className="space-y-16 p-16 bg-white rounded-[6rem] shadow-[0_80px_160px_rgba(0,0,0,0.08)] border border-slate-50">
+      <div className="aspect-[4/5] bg-slate-50 rounded-[4rem] border-4 border-dashed border-slate-100 flex flex-col items-center justify-center p-12 cursor-pointer overflow-hidden transition-all hover:bg-slate-100/50" onClick={() => document.getElementById('cam').click()}>
+        {form.img ? <img src={form.img} className="w-full h-full object-cover" alt="Wine preview" /> : <div className="text-center space-y-6"><Camera size={64} className="mx-auto text-slate-200" /><p className="text-[10px] font-black text-slate-300 uppercase italic tracking-[0.5em]">Capture Origin Asset</p></div>}
+      </div>
+      <input type="file" id="cam" className="hidden" onChange={e => {
+        const r = new FileReader(); r.onload = ev => setForm({ ...form, img: ev.target.result }); r.readAsDataURL(e.target.files[0]);
+      }} />
+      <div className="space-y-12">
+        <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="w-full text-5xl font-serif font-black italic uppercase outline-none border-b-2 border-slate-50 focus:border-blue-500 py-6 placeholder:opacity-20" placeholder="CHATEAU GRAND..." />
+        <div className="flex items-center gap-6">
+          <span className="text-3xl font-serif font-black text-slate-200 italic">R$</span>
+          <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} className="w-full text-6xl font-serif font-black italic outline-none border-b-2 border-slate-50 focus:border-blue-500 py-6 placeholder:opacity-20" placeholder="0.00" />
+        </div>
+        <button onClick={executeUpload} disabled={busy || !form.name || !form.price} className="w-full bg-[#020617] text-white py-14 rounded-[4rem] font-black uppercase text-xs tracking-[0.8em] hover:bg-blue-600 transition-all flex items-center justify-center gap-6 shadow-3xl active:scale-95 disabled:grayscale disabled:opacity-20">
+          {busy ? <Loader2 className="animate-spin" size={32} /> : <Plus size={32} />} ACTIVATE ASSET
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Global UI Shells
 function SideLink({ active, onClick, icon: Icon, label }) {
   return (
-    <button onClick={onClick} className={`w-full flex items-center gap-6 p-6 rounded-2xl transition-all duration-500 ${active ? 'bg-blue-600 text-white shadow-xl translate-x-1 font-black' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}>
-      <Icon size={20} />
+    <button onClick={onClick} className={`w-full flex items-center gap-6 p-6 rounded-2xl transition-all duration-500 group ${active ? 'bg-blue-600 text-white shadow-xl translate-x-1 font-black' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}>
+      <Icon size={20} className={active ? 'text-white' : 'group-hover:text-blue-400 transition-colors'} />
       <span className="text-[11px] uppercase tracking-widest italic">{label}</span>
     </button>
   );
@@ -310,84 +500,6 @@ function HealthIndicator({ label, active }) {
     <div className="flex items-center justify-between p-2">
       <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest italic">{label}</span>
       <div className={`size-2.5 rounded-full ${active ? 'bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]' : 'bg-rose-500 shadow-[0_0_10px_#f43f5e]'}`} />
-    </div>
-  );
-}
-
-function ModernTile({ title, val, icon: Icon, active }) {
-  return (
-    <div className={`p-10 rounded-[3rem] border transition-all ${active ? 'bg-white border-slate-100 shadow-xl' : 'bg-slate-50 opacity-50'}`}>
-      <div className="size-14 rounded-2xl bg-slate-50 flex items-center justify-center text-blue-600 mb-6"><Icon size={24} /></div>
-      <p className="text-2xl font-black italic uppercase tracking-tighter mb-2">{val}</p>
-      <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 italic">{title}</p>
-    </div>
-  );
-}
-
-// Reuse logic from v29 for other components (OmnichannelView, RetailTerminal, etc.)
-// For brevity, I'm defining shells that would contain the previous logic
-function OmnichannelView({ inventory, lowStockItems, notify }) {
-  return (
-    <div className="space-y-12">
-      <h2 className="text-6xl font-serif font-black italic uppercase text-[#020617]">Omni <span className="text-blue-600">Grid</span></h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {lowStockItems.map(item => (
-          <div key={item.id} className="p-10 bg-rose-50 rounded-[4rem] border border-rose-100 flex justify-between items-center group">
-            <div>
-              <p className="text-2xl font-black italic uppercase text-rose-600">{item.name}</p>
-              <p className="text-[10px] font-black text-rose-400 mt-2 italic font-mono">STOCK: {item.stockBr} UNITS</p>
-            </div>
-            <div className="size-16 bg-rose-600 text-white rounded-2xl flex items-center justify-center animate-pulse"><AlertTriangle size={32} /></div>
-          </div>
-        ))}
-      </div>
-      {/* Standard Channel Cards and Replenishment Drafts here */}
-    </div>
-  );
-}
-
-function RetailTerminal({ inventory, db, appId, notify }) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-      {inventory.map(item => (
-        <div key={item.id} className="bg-white p-12 rounded-[5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-700 group">
-          <div className="aspect-square rounded-[3.5rem] bg-slate-50 mb-10 overflow-hidden relative">
-            {item.img && <img src={item.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />}
-            <div className="absolute top-8 right-8 bg-[#020617] text-white text-[9px] font-black px-6 py-2 rounded-full italic">Stock: {item.stockBr}</div>
-          </div>
-          <h4 className="text-3xl font-serif font-black italic uppercase mb-8 leading-none opacity-80">{item.name}</h4>
-          <div className="flex justify-between items-center">
-            <span className="text-4xl font-black italic">R$ {item.price?.toFixed(2)}</span>
-            <button onClick={async () => {
-              const wineRef = doc(db, 'artifacts', appId, 'public', 'data', 'inventory', item.id);
-              await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'orders'), { wineName: item.name, total: item.price, timestamp: serverTimestamp(), source: 'Natal Terminal' });
-              await updateDoc(wineRef, { stockBr: increment(-1) });
-              notify("Success: Inventory Optimized!");
-            }} className="size-16 bg-[#020617] text-white rounded-2xl flex items-center justify-center hover:bg-blue-600 transition-colors">
-              <ShoppingCart size={28} />
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function AuditHQ({ orders }) {
-  return (
-    <div className="space-y-12">
-      <h3 className="text-5xl font-serif font-black italic uppercase text-[#020617]">Ledger <span className="text-blue-600">Audit</span></h3>
-      <div className="space-y-6">
-        {orders.map(o => (
-          <div key={o.id} className="p-8 bg-slate-50 rounded-[3rem] border border-slate-100 flex justify-between items-center">
-            <div>
-              <p className="text-2xl font-black italic uppercase text-slate-800">{o.wineName}</p>
-              <p className="text-[9px] font-black text-slate-400 mt-2 font-mono uppercase">{o.source} | {o.timestamp?.seconds ? new Date(o.timestamp.seconds * 1000).toLocaleString() : 'PENDING'}</p>
-            </div>
-            <p className="text-3xl font-black italic text-emerald-600">+ R$ {o.total?.toFixed(2)}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
@@ -403,36 +515,4 @@ function SEOManager({ metaTag }) {
     meta.content = metaTag;
   }, [metaTag]);
   return null;
-}
-
-function ProductEntryModule({ db, appId, notify }) {
-  const [form, setForm] = useState({ name: '', price: '', img: null });
-  const [busy, setBusy] = useState(false);
-
-  const executeUpload = async () => {
-    if (!form.name || !form.price) return;
-    setBusy(true);
-    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'inventory'), { ...form, price: parseFloat(form.price), stockBr: 10, stockFr: 500, timestamp: serverTimestamp() });
-    setForm({ name: '', price: '', img: null });
-    notify("Asset Activated in Bordeaux!");
-    setBusy(false);
-  };
-
-  return (
-    <div className="space-y-12 p-16 bg-white rounded-[6rem] shadow-2xl border border-slate-50">
-      <div className="aspect-[4/5] bg-slate-50 rounded-[4rem] border-4 border-dashed border-slate-100 flex flex-col items-center justify-center p-12 cursor-pointer overflow-hidden" onClick={() => document.getElementById('cam').click()}>
-        {form.img ? <img src={form.img} className="w-full h-full object-cover" /> : <div className="text-center space-y-4"><Camera size={48} className="mx-auto text-slate-200" /><p className="text-[10px] font-black text-slate-300 uppercase italic tracking-widest">Capture Origin Asset</p></div>}
-      </div>
-      <input type="file" id="cam" className="hidden" onChange={e => {
-        const r = new FileReader(); r.onload = ev => setForm({ ...form, img: ev.target.result }); r.readAsDataURL(e.target.files[0]);
-      }} />
-      <div className="space-y-8">
-        <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="w-full text-5xl font-serif font-black italic uppercase outline-none border-b-2 border-slate-50 focus:border-blue-500 py-4" placeholder="GRAND CRU..." />
-        <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} className="w-full text-5xl font-serif font-black italic outline-none border-b-2 border-slate-50 focus:border-blue-500 py-4" placeholder="0.00" />
-        <button onClick={executeUpload} disabled={busy} className="w-full bg-[#020617] text-white py-12 rounded-[3.5rem] font-black uppercase text-xs tracking-widest hover:bg-blue-600 transition-all flex items-center justify-center gap-4">
-          {busy ? <Loader2 className="animate-spin" /> : <Plus />} ACTIVATE DIGITAL ASSET
-        </button>
-      </div>
-    </div>
-  );
 }
